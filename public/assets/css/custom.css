@@ -1,0 +1,18 @@
+/* Custom CSS for Couponly */
+
+.header-section {
+    background-color: #f0f2f5 !important; /* Light gray for header */
+}
+
+.header-section .sidebar-wrapper {
+    background-color: #ffffff !important; /* White for sidebar */
+}
+
+/* Filament Admin Panel Customizations */
+.fi-sidebar {
+    background-color: #f0f2f5 !important; /* Light gray for Filament sidebar */
+}
+
+.fi-topbar {
+    background-color: #ffffff !important; /* White for Filament topbar */
+}

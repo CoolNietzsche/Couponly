@@ -1,0 +1,9 @@
+/* Custom CSS for Filament Dashboard */
+
+.fi-sidebar {
+    background-color: #f0f2f5 !important; /* Light gray for Filament sidebar */
+}
+
+.fi-topbar {
+    background-color: #ffffff !important; /* White for Filament topbar */
+}

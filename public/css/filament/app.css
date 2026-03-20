@@ -1,0 +1,5 @@
+/* Custom Filament sidebar background */
+
+.filament-sidebar {
+    background-color: #e0f0ff !important; /* Light blue */
+}
