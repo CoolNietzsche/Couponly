@@ -340,8 +340,8 @@
                                         </span>
                                     </div>
                                     <div class="d-center thumb-area s1-2nd-bg-color w-100">
-                                        <img loading="lazy" src="{{ $coupon->image ? asset( $coupon->image) : asset('assets/images/popular-coupons-' . ($loop->index % 9 + 11) . '.png') }}"
-                                            alt="{{ $coupon->title }}" class="w-100 rounded-2">
+                                        <img loading="lazy" src="{{ $coupon->image ? asset('storage/' . $coupon->image) : asset('assets/images/popular-coupons-' . ($loop->index % 9 + 11) . '.png') }}"
+     alt="{{ $coupon->title }}" class="w-100 rounded-2">
                                     </div>
                                 </div>
                                 <div

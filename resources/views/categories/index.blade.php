@@ -11,8 +11,12 @@
                     <div class="breadcrumb-area">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb second position-relative m-0 d-center justify-content-start gap-2 gap-md-3">
-                                <li class="breadcrumb-item d-flex align-items-center fs-seven"><a href="{{ route('home') }}" class="n17-color">Home</a></li>
-                                <li class="breadcrumb-item d-flex align-items-center fs-seven active" aria-current="page"><span class="fw-mid f5-color">Categories</span></li>
+                                <li class="breadcrumb-item d-flex align-items-center fs-seven">
+                                    <a href="{{ route('home') }}" class="n17-color">Home</a>
+                                </li>
+                                <li class="breadcrumb-item d-flex align-items-center fs-seven active" aria-current="page">
+                                    <span class="fw-mid f5-color">Categories</span>
+                                </li>
                             </ol>
                         </nav>
                     </div>
@@ -46,6 +50,12 @@
                     </div>
                     @endforeach
                 </div>
+
+                <!-- Pagination -->
+                <div class="mt-4 d-flex justify-content-center">
+                    {{ $categories->links() }}
+                </div>
+
             </div>
         </div>
     </div>

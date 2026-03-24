@@ -6,75 +6,96 @@ use App\Models\Category;
 use App\Models\Coupon;
 use App\Models\Store;
 use App\Models\Feedback;
+use App\Models\Advertisement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
-   public function index()
+    public function index(Request $request)
     {
-        $coupons = Coupon::where('is_exclusive', true)
-            ->where('active', true)
-            ->with(['store', 'category'])
-            ->take(3)
-            ->get();
+        // 1. Static Content Caching (Saved for 1 hour for better performance)
+        $categories = Cache::remember('home_categories', 3600, function () {
+            return Category::take(10)->get();
+        });
 
-             $popularCoupons = Coupon::with(['store', 'category'])
-            ->whereNotNull('tags')
-            ->where('active', true)
-            ->take(5)
-            ->get();
+        $advertisements = Cache::remember('home_ads', 3600, function () {
+            return Advertisement::where('active', true)
+                ->orderBy('position', 'asc')
+                ->get();
+        });
 
-              $topStores = Store::with(['coupons' => function ($query) {
-            $query->where('expire_date', '>=', now())->where('active', true)->take(1);
-        }])->take(5)->get();
+        $topStores = Cache::remember('home_topStores', 3600, function () {
+            return Store::with(['coupons' => function ($query) {
+                $query->where('expire_date', '>=', now())->where('active', true)->take(1);
+            }])->take(5)->get();
+        });
 
-    //  $featuredStore = Store::where('slug', 'amazon')->with(['coupons' => function ($query) {
-    //         $query->where('expire_date', '>=', now());
-    //     }])->first();
+        // 2. Fixed Lists (Cached content for specific UI components)
+        $coupons = Cache::remember('home_exclusive_coupons', 3600, function () {
+            return Coupon::where('is_exclusive', true)
+                ->where('active', true)
+                ->with(['store', 'category'])
+                ->take(3)
+                ->get();
+        });
 
+        $popularCarouselCoupons = Cache::remember('home_carousel_coupons', 3600, function () {
+            return Coupon::where('active', true)
+                ->whereNotNull('image')
+                ->latest()
+                ->with(['store', 'category'])
+                ->take(10)
+                ->get();
+        });
 
-        //   $collectionStores = Store::where('slug', '!=', 'amazon')
+        // --- Original Commented Sections Preserved ---
+        // $featuredStore = Store::where('slug', 'amazon')->with(['coupons' => function ($query) {
+        //         $query->where('expire_date', '>=', now());
+        //     }])->first();
+
+        // $collectionStores = Store::where('slug', '!=', 'amazon')
         //     ->with(['coupons' => function ($query) {
         //         $query->where('expire_date', '>=', now());
         //     }])
         //     ->get();
 
-            
-        $popularCarouselCoupons = Coupon::whereIn('code', ['ADHUA10', 'AMAZONFS', 'ALIBABA30'])
-            ->where('active', true)
-            ->with(['store', 'category'])
-            ->get();
-
         // $feedback = Feedback::all();
 
-        $categories = Category::take(10)->get();
+        // 3. Paginated Lists (Dynamic content)
+        // We use unique page names ('p_page', 'b_page', 'e_page') so that 
+        // flipping through one list doesn't reset the others.
         
-        // Get BOGO coupons for display
+        $popularCoupons = Coupon::with(['store', 'category'])
+            ->whereNotNull('tags')
+            ->where('active', true)
+            ->paginate(10, ['*'], 'p_page');
+
         $bogoCoupons = Coupon::with(['store', 'category'])
             ->where('type', 'Buy One Get One')
             ->where('expire_date', '>=', now())
             ->where('active', true)
             ->latest()
-            ->limit(5)
-            ->get();
-        
-        // Get ending soon coupons
+            ->paginate(10, ['*'], 'b_page');
+
         $endingSoonCoupons = Coupon::with(['store', 'category'])
             ->where('expire_date', '>=', now())
             ->where('expire_date', '<=', now()->addDays(7))
             ->where('active', true)
             ->orderBy('expire_date', 'asc')
-            ->limit(5)
-            ->get();
+            ->paginate(10, ['*'], 'e_page');
 
-        // Get active advertisements ordered by position
-        $advertisements = \App\Models\Advertisement::where('active', true)
-            ->orderBy('position', 'asc')
-            ->get();
-
-        return view('home', compact('coupons', 'popularCoupons', 'topStores',   'popularCarouselCoupons',  'categories', 'bogoCoupons', 'endingSoonCoupons', 'advertisements'));
+        return view('home', compact(
+            'coupons',
+            'popularCoupons',
+            'topStores',
+            'popularCarouselCoupons',
+            'categories',
+            'bogoCoupons',
+            'endingSoonCoupons',
+            'advertisements'
+        ));
     }
-
 
     public function about()
     {

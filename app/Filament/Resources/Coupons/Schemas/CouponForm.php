@@ -63,7 +63,9 @@ class CouponForm
     ->minValue(0)
     ->visible(fn ($get) => (bool) $get('is_exclusive')),
                 FileUpload::make('image')
-                    ->image(),
+                    ->image()
+                    ->disk('public')
+                    ->directory('assets/images'),
                 Toggle::make('active')
                     ->label('Active')
                     ->default(true),

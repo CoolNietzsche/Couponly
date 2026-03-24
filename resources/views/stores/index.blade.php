@@ -38,7 +38,7 @@
                         <div class="col-6 col-sm-4 col-md-3 col-xl-2">
                             <div class="single-box gap-2 gap-md-3 p1-2nd-bg-color cus-border border b-eighth p-2 p-xxl-3 rounded-2 d-center flex-column">
                                 <div class="d-center thumb-area rounded-2 w-100">
-                                    <img loading="lazy" class="w-100" src="{{ asset($store->logo) }}" alt="Image">
+                                    <img loading="lazy" class="w-100" src="{{ asset('storage/' . $store->logo) }}" alt="Image">
                                 </div>
                                 <div class="bottom-area w-100 d-grid gap-2 gap-md-3">
                                     <div class="rounded-1 n1-bg-color d-center gap-2 gap-md-3 justify-content-start cus-border border b-tenth p-1">

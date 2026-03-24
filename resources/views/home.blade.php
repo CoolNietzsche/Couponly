@@ -54,11 +54,11 @@
                             <span class="fs-six text-nowrap">Shop Now</span>
                         </a>
                     </div>
-                    <div class="abs-area bottom-0 end-0">
-                        <img loading="lazy" class="w-100 h-100"
-                            src="{{ asset($coupon->image ?? 'assets/images/index-5-banner-' . ($loop->index % 3 + 1) . '.png') }}"
-                            alt="{{ $coupon->title }}">
-                    </div>
+                    <div class="abs-area bottom-0 end-0"> 
+    <img loading="lazy" class="w-100 h-100"
+         src="{{ $coupon->image ? asset('storage/' . $coupon->image) : asset('assets/images/index-3-banner-' . ($loop->index % 3 + 1) . '.png') }}"
+         alt="{{ $coupon->title }}">
+</div>
                 </div>
             </div>
             @endforeach
@@ -108,7 +108,7 @@ $positionedAds = $advertisements->where('position', $position);
                         <a href="{{ route('coupons.index', ['category' => $category->slug]) }}"
                             class="category-card d-flex flex-column align-items-center justify-content-center text-center p-2 p-sm-3 rounded-2 n1-bg-color cus-border border h-100">
                             <div class="category-thumb d-flex align-items-center justify-content-center mb-1">
-                                <img loading="lazy" src="{{ asset('/public/storage/'.$category->icon) }}"
+                                <img loading="lazy" src="{{ asset($category->icon) }}"
                                     alt="{{ $category->name }}" class="img-fluid category-icon">
                             </div>
 
@@ -163,7 +163,7 @@ $positionedAds = $advertisements->where('position', $position);
             </div>
         </div>
         <div class="row cus-row gy-5 gy-xxl-6 justify-content-center justify-content-md-start">
-            @foreach ($popularCoupons->take(5) as $coupon)
+            @foreach ($popularCoupons as $coupon)
             <div class="col-6 col-md-4 col-lg-3 col-xl-2">
                 <div
                     class="single-box transition position-relative d-center flex-column text-center gap-4 gap-md-6 n1-bg-color cus-border border b-fourth box-shadow-p2 px-3 px-md-4 py-5 py-md-8 rounded-3">
@@ -213,6 +213,9 @@ $positionedAds = $advertisements->where('position', $position);
                 </div>
             </div>
             @endforeach
+            </div> <div class="d-flex justify-content-center mt-4">
+            {{ $popularCoupons->appends(['b_page' => request('b_page'), 'e_page' => request('e_page')])->links() }}
+        </div>
         </div>
     </div>
 </section>
@@ -251,7 +254,7 @@ $positionedAds = $advertisements->where('position', $position);
             </div>
         </div>
         <div class="row cus-row gy-5 gy-xxl-6 justify-content-center justify-content-md-start">
-            @foreach ($bogoCoupons->take(5) as $coupon)
+            @foreach ($bogoCoupons as $coupon)
             <div class="col-6 col-md-4 col-lg-3 col-xl-2">
                 <div
                     class="single-box transition position-relative d-center flex-column text-center gap-4 gap-md-6 n1-bg-color cus-border border b-fourth box-shadow-p2 px-3 px-md-4 py-5 py-md-8 rounded-3">
@@ -296,6 +299,9 @@ $positionedAds = $advertisements->where('position', $position);
                 </div>
             </div>
             @endforeach
+            <div class="d-flex justify-content-center mt-4">
+            {{ $bogoCoupons->appends(['p_page' => request('p_page')])->links() }}
+        </div>
         </div>
     </div>
 </section>
@@ -335,7 +341,7 @@ $positionedAds = $advertisements->where('position', $position);
                 </div>
             </div>
             <div class="row cus-row gy-5 gy-xxl-6 justify-content-center justify-content-md-start">
-                @foreach ($endingSoonCoupons->take(5) as $coupon)
+                @foreach ($endingSoonCoupons as $coupon)
                     <div class="col-6 col-md-4 col-lg-3 col-xl-2">
                         <div class="single-box transition position-relative d-center flex-column text-center gap-4 gap-md-6 n1-bg-color cus-border border b-fourth box-shadow-p2 px-3 px-md-4 py-5 py-md-8 rounded-3">
                             <div class="abs-area position-absolute top-0 start-0 my-2 my-md-3 rounded-pill px-3 px-md-4 py-1 py-md-2 p1-2nd-bg-color cus-border border b-eighth">
@@ -372,6 +378,9 @@ $positionedAds = $advertisements->where('position', $position);
                         </div>
                     </div>
                 @endforeach
+                <div class="d-flex justify-content-center mt-4">
+            {{ $endingSoonCoupons->appends(['p_page' => request('p_page'), 'b_page' => request('b_page')])->links() }}
+        </div>
             </div>
         </div>
     </section>
@@ -478,7 +487,7 @@ $positionedAds = $advertisements->where('position', $position);
                             <div class="d-center justify-content-between gap-3 gap-md-5">
                                 <div class="d-center justify-content-between gap-3 gap-md-4">
                                     <div class="d-center thumb-area rounded-2 w-100">
-                                        <img src="{{ asset($store->logo) }}" alt="{{ $store->name }}">
+                                        <img src="{{ asset('storage/' . $store->logo) }}" alt="Image"">
                                     </div>
                                     <div class="d-grid gap-2">
                                         <h5 class="n15-color text-nowrap">{{ $store->name }}</h5>
@@ -573,7 +582,7 @@ $positionedAds = $advertisements->where('position', $position);
                             alt="{{ $featuredStore->name }}">
                         <div
                             class="abs-area d-center s1-bg-color rounded-2 m-3 icon-area box-six position-absolute top-0 end-0">
-                            <img loading="lazy" class="max-un" src="{{ asset('assets/images/shape/crown.png') }}"
+                            <img loading="lazy" class="max-un" src="{{ asset($category->shape) }}"
                                 alt="Crown">
                         </div>
                     </div>
@@ -596,8 +605,8 @@ $positionedAds = $advertisements->where('position', $position);
                 <div
                     class="single-box d-center gap-2 gap-md-3 n1-bg-color cus-border border b-eighth p-2 p-xxl-3 rounded-2 ter position-relative">
                     <div class="d-center thumb-area rounded-2 w-100">
-                        <img loading="lazy" class="w-100 h-100" src="{{ asset($store->logo) }}"
-                            alt="{{ $store->name }}">
+                        <img loading="lazy" class="w-100 h-100" src="{{ asset('storage/' . $store->logo) }}"
+                            alt="Image">
                     </div>
                     <a href="{{ url('/stores/' . $store->slug) }}"
                         class="hovered-item transition opacity-0 cus-border border b-fifteen position-absolute n1-bg-color cus-z1 w-100 h-100 text-center d-center flex-column gap-1">
@@ -648,7 +657,8 @@ $positionedAds = $advertisements->where('position', $position);
                                         </span>
                                     </div>
                                     <div class="d-center thumb-area s1-2nd-bg-color w-100">
-                                        <img loading="lazy" src="{{ asset($coupon->image) }}" alt="{{ $coupon->title }}" class="w-100">
+                                        <img loading="lazy" src="{{ $coupon->image ? asset('storage/' . $coupon->image) : asset('assets/images/popular-coupons-' . ($loop->index % 9 + 11) . '.png') }}"
+     alt="{{ $coupon->title }}" class="w-100">
                                     </div>
                                     <div class="bottom-area d-grid gap-3 gap-md-4 p-3 p-md-6">
                                         <a href="{{ url('/stores/' . $coupon->store->slug) }}"><h4 class="n17-color fw-bold">{{ $coupon->title }}</h4></a>

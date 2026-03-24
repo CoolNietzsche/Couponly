@@ -18,8 +18,11 @@ class CategoriesTable
                     ->searchable(),
                 TextColumn::make('slug')
                     ->searchable(),
-                TextColumn::make('icon')
-                    ->searchable(),
+                ImageColumn::make('icon')
+    ->label('Icon')
+    ->disk('public')
+    ->directory('category-icons')
+    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
