@@ -62,28 +62,39 @@ class HomeController extends Controller
 
         // $feedback = Feedback::all();
 
-        // 3. Paginated Lists (Dynamic content)
-        // We use unique page names ('p_page', 'b_page', 'e_page') so that 
-        // flipping through one list doesn't reset the others.
-        
-        $popularCoupons = Coupon::with(['store', 'category'])
-            ->whereNotNull('tags')
-            ->where('active', true)
-            ->paginate(10, ['*'], 'p_page');
+        // 3. Paginated Lists (Dynamic content with Caching)
+        // We capture current pages to use in the Cache Keys
+        $pPage = $request->input('p_page', 1);
+        $bPage = $request->input('b_page', 1);
+        $ePage = $request->input('e_page', 1);
 
-        $bogoCoupons = Coupon::with(['store', 'category'])
-            ->where('type', 'Buy One Get One')
-            ->where('expire_date', '>=', now())
-            ->where('active', true)
-            ->latest()
-            ->paginate(10, ['*'], 'b_page');
+        // Cache Popular Coupons per page
+        $popularCoupons = Cache::remember("popular_coupons_page_{$pPage}", 3600, function () {
+            return Coupon::with(['store', 'category'])
+                ->whereNotNull('tags')
+                ->where('active', true)
+                ->paginate(10, ['*'], 'p_page');
+        })->appends(['b_page' => $bPage, 'e_page' => $ePage]);
 
-        $endingSoonCoupons = Coupon::with(['store', 'category'])
-            ->where('expire_date', '>=', now())
-            ->where('expire_date', '<=', now()->addDays(7))
-            ->where('active', true)
-            ->orderBy('expire_date', 'asc')
-            ->paginate(10, ['*'], 'e_page');
+        // Cache BOGO Coupons per page
+        $bogoCoupons = Cache::remember("bogo_coupons_page_{$bPage}", 3600, function () {
+            return Coupon::with(['store', 'category'])
+                ->where('type', 'Buy One Get One')
+                ->where('expire_date', '>=', now())
+                ->where('active', true)
+                ->latest()
+                ->paginate(10, ['*'], 'b_page');
+        })->appends(['p_page' => $pPage, 'e_page' => $ePage]);
+
+        // Cache Ending Soon Coupons per page
+        $endingSoonCoupons = Cache::remember("ending_soon_page_{$ePage}", 3600, function () {
+            return Coupon::with(['store', 'category'])
+                ->where('expire_date', '>=', now())
+                ->where('expire_date', '<=', now()->addDays(7))
+                ->where('active', true)
+                ->orderBy('expire_date', 'asc')
+                ->paginate(10, ['*'], 'e_page');
+        })->appends(['p_page' => $pPage, 'b_page' => $bPage]);
 
         return view('home', compact(
             'coupons',
