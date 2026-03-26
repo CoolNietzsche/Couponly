@@ -153,7 +153,7 @@ $positionedAds = $advertisements->where('position', $position);
 
 
 <!-- Popular Offers Start (Position 4) -->
- <section class="top-stores trending-features py-12 py-md-20">
+<section class="top-stores trending-features py-12 py-md-20">
     <div class="container-fluid">
         <div class="row gy-6 gy-lg-0 pb-4 pb-lg-6 justify-content-between align-items-center">
             <div class="col-md-4">
@@ -163,27 +163,34 @@ $positionedAds = $advertisements->where('position', $position);
             </div>
         </div>
         <div class="row cus-row gy-5 gy-xxl-6 justify-content-center justify-content-md-start">
-            @foreach ($popularCoupons as $coupon)
+            @foreach ($popularCoupons->take(5) as $coupon)
             <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="single-box transition position-relative d-center flex-column text-center gap-4 gap-md-6 n1-bg-color cus-border border b-fourth box-shadow-p2 px-3 px-md-4 py-5 py-md-8 rounded-3">
-                    <div class="abs-area position-absolute top-0 start-0 my-2 my-md-3 rounded-pill px-3 px-md-4 py-1 py-md-2 p1-2nd-bg-color cus-border border b-eighth">
+                <div
+                    class="single-box transition position-relative d-center flex-column text-center gap-4 gap-md-6 n1-bg-color cus-border border b-fourth box-shadow-p2 px-3 px-md-4 py-5 py-md-8 rounded-3">
+                    <div
+                        class="abs-area position-absolute top-0 start-0 my-2 my-md-3 rounded-pill px-3 px-md-4 py-1 py-md-2 p1-2nd-bg-color cus-border border b-eighth">
                         <span class="f5-color fw-mid">Features</span>
                     </div>
-                    <div class="abs-area position-absolute top-0 end-0 my-2 my-md-3 border-dash rounded-pill px-4 px-md-6 py-1 py-md-2 d-center gap-1 gap-md-2 f7-bg-color cus-border border b-sixth">
+                    <div
+                        class="abs-area position-absolute top-0 end-0 my-2 my-md-3 border-dash rounded-pill px-4 px-md-6 py-1 py-md-2 d-center gap-1 gap-md-2 f7-bg-color cus-border border b-sixth">
                         <span class="s1-color fs-five fw-bold d-center"><i class="fas fa-star"></i></span>
                         <span class="n15-color fw-mid">4.7</span>
                     </div>
                     <div class="d-center thumb-area rounded-circle">
-                        <img loading="lazy" class="rounded-circle" src="{{ asset($coupon->image) }}" alt="{{ $coupon->title }}">
+                        <img loading="lazy" class="rounded-circle" src="{{ asset($coupon->image) }}"
+                            alt="{{ $coupon->title }}">
                     </div>
                     <div class="d-grid gap-2">
                         <span class="n15-color fs-seven fw-semibold">{{ $coupon->store->name }}</span>
                         <h5 class="n15-color fw-bold">{{ $coupon->title }}</h5>
-                        <span class="n15-color fs-seven">{{ $coupon->store->coupons_count ?? $coupon->store->coupons->count() }} Coupons Available</span>                    </div>
+                        <span class="n15-color fs-seven">{{ $coupon->store->coupons()->count() }} Coupons | {{
+                            $coupon->store->coupons()->where('expire_date', '>=', now())->count() }} Offers
+                            Available</span>
+                    </div>
                     @auth
                     <button
                         class="cmn-btn btn-overlay border-dash rounded-pill px-4 px-md-6 py-2 py-md-3 w-100 position-relative d-center"
-                        data-bs-toggle="modal" data-bs-target="#getCouponCodetre{{ $coupon->code }}"
+                        data-bs-toggle="modal" data-bs-target="#getBogoCouponCode{{ $coupon->code }}"
                         data-coupon-code="{{ $coupon->code }}">
                         <span class="f5-color fw-semibold coupon-code w-100 d-center">{{ $coupon->code }}</span>
                         <span class="position-absolute show transition n1-color">Show Coupon</span>
@@ -196,7 +203,8 @@ $positionedAds = $advertisements->where('position', $position);
                         <span class="position-absolute show transition n1-color">Login to Get Coupon</span>
                     </button>
                     @endauth
-                    <div class="rounded-3 px-3 px-md-4 py-1 py-md-2 p1-2nd-bg-color d-center gap-1 gap-md-2 cus-border border b-eighth">
+                    <div
+                        class="rounded-3 px-3 px-md-4 py-1 py-md-2 p1-2nd-bg-color d-center gap-1 gap-md-2 cus-border border b-eighth">
                         <span class="d-center fs-four p2-color">
                             <i class="ph ph-clock"></i>
                         </span>
@@ -205,9 +213,6 @@ $positionedAds = $advertisements->where('position', $position);
                 </div>
             </div>
             @endforeach
-        </div> 
-        <div class="d-flex justify-content-center mt-4">
-            {{ $popularCoupons->links() }}
         </div>
     </div>
 </section>
@@ -246,19 +251,25 @@ $positionedAds = $advertisements->where('position', $position);
             </div>
         </div>
         <div class="row cus-row gy-5 gy-xxl-6 justify-content-center justify-content-md-start">
-            @foreach ($bogoCoupons as $coupon)
+            @foreach ($bogoCoupons->take(5) as $coupon)
             <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="single-box transition position-relative d-center flex-column text-center gap-4 gap-md-6 n1-bg-color cus-border border b-fourth box-shadow-p2 px-3 px-md-4 py-5 py-md-8 rounded-3">
-                    <div class="abs-area position-absolute top-0 start-0 my-2 my-md-3 rounded-pill px-3 px-md-4 py-1 py-md-2 p1-2nd-bg-color cus-border border b-eighth">
+                <div
+                    class="single-box transition position-relative d-center flex-column text-center gap-4 gap-md-6 n1-bg-color cus-border border b-fourth box-shadow-p2 px-3 px-md-4 py-5 py-md-8 rounded-3">
+                    <div
+                        class="abs-area position-absolute top-0 start-0 my-2 my-md-3 rounded-pill px-3 px-md-4 py-1 py-md-2 p1-2nd-bg-color cus-border border b-eighth">
                         <span class="f5-color fw-mid">BOGO</span>
                     </div>
                     <div class="d-center thumb-area rounded-circle">
-                        <img loading="lazy" class="rounded-circle" src="{{ asset($coupon->image) }}" alt="{{ $coupon->title }}">
+                        <img loading="lazy" class="rounded-circle" src="{{ asset($coupon->image) }}"
+                            alt="{{ $coupon->title }}">
                     </div>
                     <div class="d-grid gap-2">
                         <span class="n15-color fs-seven fw-semibold">{{ $coupon->store->name }}</span>
                         <h5 class="n15-color fw-bold">{{ $coupon->title }}</h5>
-                        <span class="n15-color fs-seven">{{ $coupon->store->coupons_count ?? $coupon->store->coupons->count() }} Coupons Available</span>                    </div>
+                        <span class="n15-color fs-seven">{{ $coupon->store->coupons()->count() }} Coupons | {{
+                            $coupon->store->coupons()->where('expire_date', '>=', now())->count() }} Offers
+                            Available</span>
+                    </div>
                     @auth
                     <button
                         class="cmn-btn btn-overlay border-dash rounded-pill px-4 px-md-6 py-2 py-md-3 w-100 position-relative d-center"
@@ -275,16 +286,16 @@ $positionedAds = $advertisements->where('position', $position);
                         <span class="position-absolute show transition n1-color">Login to Get Coupon</span>
                     </button>
                     @endauth
-                    <div class="rounded-3 px-3 px-md-4 py-1 py-md-2 p1-2nd-bg-color d-center gap-1 gap-md-2 cus-border border b-eighth">
-                        <span class="d-center fs-four p2-color"><i class="ph ph-clock"></i></span>
+                    <div
+                        class="rounded-3 px-3 px-md-4 py-1 py-md-2 p1-2nd-bg-color d-center gap-1 gap-md-2 cus-border border b-eighth">
+                        <span class="d-center fs-four p2-color">
+                            <i class="ph ph-clock"></i>
+                        </span>
                         <span class="f5-color fw-mid">Ends: {{ $coupon->expire_date->format('d/m/y') }}</span>
                     </div>
                 </div>
             </div>
             @endforeach
-        </div>
-        <div class="d-flex justify-content-center mt-4">
-            {{ $bogoCoupons->links() }}
         </div>
     </div>
 </section>
@@ -314,61 +325,57 @@ $positionedAds = $advertisements->where('position', $position);
 
     <!-- Ending Soon Offers Start (Position 8) -->
     @if($endingSoonCoupons->count() > 0)
-<section class="top-stores trending-features py-12 py-md-20">
-    <div class="container-fluid">
-        <div class="row gy-6 gy-lg-0 pb-4 pb-lg-6 justify-content-between align-items-center">
-            <div class="col-md-4">
-                <div class="head-area">
-                    <h3 class="n17-color">Ending <span class="s1-color">Soon</span></h3>
-                </div>
-            </div>
-        </div>
-        <div class="row cus-row gy-5 gy-xxl-6 justify-content-center justify-content-md-start">
-            @foreach ($endingSoonCoupons as $coupon)
-            <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="single-box transition position-relative d-center flex-column text-center gap-4 gap-md-6 n1-bg-color cus-border border b-fourth box-shadow-p2 px-3 px-md-4 py-5 py-md-8 rounded-3">
-                    <div class="abs-area position-absolute top-0 start-0 my-2 my-md-3 rounded-pill px-3 px-md-4 py-1 py-md-2 p1-2nd-bg-color cus-border border b-eighth">
-                        <span class="f5-color fw-mid">Limited Time</span>
-                    </div>
-                    <div class="d-center thumb-area rounded-circle">
-                        <img loading="lazy" class="rounded-circle" src="{{ asset($coupon->image) }}" alt="{{ $coupon->title }}">
-                    </div>
-                    <div class="d-grid gap-2">
-                        <span class="n15-color fs-seven fw-semibold">{{ $coupon->store->name }}</span>
-                        <h5 class="n15-color fw-bold">{{ $coupon->title }}</h5>
-                        <span class="n15-color fs-seven">{{ $coupon->store->coupons_count ?? $coupon->store->coupons->count() }} Coupons Available</span>                    </div>
-                    @auth
-                    <button class="cmn-btn btn-overlay border-dash rounded-pill px-4 px-md-6 py-2 py-md-3 w-100 position-relative d-center" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#getEndingSoonCouponCode{{ $coupon->code }}" 
-                            data-coupon-code="{{ $coupon->code }}">
-                        <span class="f5-color fw-semibold coupon-code w-100 d-center">{{ $coupon->code }}</span>
-                        <span class="position-absolute show transition n1-color">Show Coupon</span>
-                    </button>
-                    @else
-                    <button class="cmn-btn btn-overlay border-dash rounded-pill px-4 px-md-6 py-2 py-md-3 w-100 position-relative d-center"
-                            data-bs-toggle="modal" 
-                            data-bs-target="#loginRequiredModal">
-                        <span class="f5-color fw-semibold coupon-code w-100 d-center">{{ $coupon->code }}</span>
-                        <span class="position-absolute show transition n1-color">Login to Get Coupon</span>
-                    </button>
-                    @endauth
-                    <div class="rounded-3 px-3 px-md-4 py-1 py-md-2 p1-2nd-bg-color d-center gap-1 gap-md-2 cus-border border b-eighth">
-                        <span class="d-center fs-four p2-color">
-                            <i class="ph ph-clock"></i>
-                        </span>
-                        <span class="f5-color fw-mid">Ends: {{ $coupon->expire_date->format('d/m/y') }}</span>
+    <section class="top-stores trending-features py-12 py-md-20">
+        <div class="container-fluid">
+            <div class="row gy-6 gy-lg-0 pb-4 pb-lg-6 justify-content-between align-items-center">
+                <div class="col-md-4">
+                    <div class="head-area">
+                        <h3 class="n17-color">Ending <span class="s1-color">Soon</span></h3>
                     </div>
                 </div>
             </div>
-            @endforeach
+            <div class="row cus-row gy-5 gy-xxl-6 justify-content-center justify-content-md-start">
+                @foreach ($endingSoonCoupons->take(5) as $coupon)
+                    <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+                        <div class="single-box transition position-relative d-center flex-column text-center gap-4 gap-md-6 n1-bg-color cus-border border b-fourth box-shadow-p2 px-3 px-md-4 py-5 py-md-8 rounded-3">
+                            <div class="abs-area position-absolute top-0 start-0 my-2 my-md-3 rounded-pill px-3 px-md-4 py-1 py-md-2 p1-2nd-bg-color cus-border border b-eighth">
+                                <span class="f5-color fw-mid">Limited Time</span>
+                            </div>
+                            <div class="d-center thumb-area rounded-circle">
+                                <img loading="lazy" class="rounded-circle" src="{{ asset('storage/' . $coupon->image) }}" alt="{{ $coupon->title }}">
+                            </div>
+                            <div class="d-grid gap-2">
+                                <span class="n15-color fs-seven fw-semibold">{{ $coupon->store->name }}</span>
+                                <h5 class="n15-color fw-bold">{{ $coupon->title }}</h5>
+                                <span class="n15-color fs-seven">{{ $coupon->store->coupons()->count() }} Coupons | {{ $coupon->store->coupons()->where('expire_date', '>=', now())->count() }} Offers Available</span>
+                            </div>
+                            @auth
+                            <button class="cmn-btn btn-overlay border-dash rounded-pill px-4 px-md-6 py-2 py-md-3 w-100 position-relative d-center" data-bs-toggle="modal" data-bs-target="#getEndingSoonCouponCode{{ $coupon->code }}" data-coupon-code="{{ $coupon->code }}">
+                                <span class="f5-color fw-semibold coupon-code w-100 d-center">{{ $coupon->code }}</span>
+                                <span class="position-absolute show transition n1-color">Show Coupon</span>
+                            </button>
+                            @else
+                            <button 
+        class="cmn-btn btn-overlay border-dash rounded-pill px-4 px-md-6 py-2 py-md-3 w-100 position-relative d-center"
+        data-bs-toggle="modal" 
+        data-bs-target="#loginRequiredModal">
+        <span class="f5-color fw-semibold coupon-code w-100 d-center">{{ $coupon->code }}</span>
+        <span class="position-absolute show transition n1-color">Login to Get Coupon</span>
+    </button>
+                            @endauth
+                            <div class="rounded-3 px-3 px-md-4 py-1 py-md-2 p1-2nd-bg-color d-center gap-1 gap-md-2 cus-border border b-eighth">
+                                <span class="d-center fs-four p2-color">
+                                    <i class="ph ph-clock"></i>
+                                </span>
+                                <span class="f5-color fw-mid">Ends: {{ $coupon->expire_date->format('d/m/y') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         </div>
-        <div class="d-flex justify-content-center mt-4">
-            {{ $endingSoonCoupons->links() }}
-        </div>
-    </div>
-</section>
-@endif
+    </section>
+    @endif
     <!-- Ending Soon Offers End -->
 
     <!-- Advertisements at Position 9 -->
