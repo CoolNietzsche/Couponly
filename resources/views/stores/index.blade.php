@@ -35,22 +35,32 @@
                 <div class="top-stores">
                     <div class="row cus-row g-3">
                         @foreach ($stores as $store)
-                        <div class="col-6 col-sm-4 col-md-3 col-xl-2">
-                            <div class="single-box gap-2 gap-md-3 p1-2nd-bg-color cus-border border b-eighth p-2 p-xxl-3 rounded-2 d-center flex-column">
-                                <div class="d-center thumb-area rounded-2 w-100">
-                                    <img loading="lazy" class="w-100" src="{{ asset($store->logo) }}" alt="Image">
-                                </div>
-                                <div class="bottom-area w-100 d-grid gap-2 gap-md-3">
-                                    <div class="rounded-1 n1-bg-color d-center gap-2 gap-md-3 justify-content-start cus-border border b-tenth p-1">
-                                        <div class="d-center fav-icon rounded-2 n1-bg-color box-shadow-p1">
-                                            <img loading="lazy" class="max-un" src="{{ asset('assets/images/fav.png') }}" alt="Image">
-                                        </div>
-                                        <span class="p1-color fs-eight fw-bold">{{ $store->coupons_count }} Coupons</span>
-                                    </div>
-                                </div>
-                            </div>
+<div class="col-6 col-sm-4 col-md-3 col-xl-2 mb-4">
+    <div class="single-box h-100 gap-2 gap-md-3 p1-2nd-bg-color cus-border border b-eighth p-2 p-xxl-3 rounded-2 d-flex flex-column justify-content-between">
+        
+        <div class="thumb-area rounded-2 w-100 d-flex justify-content-center align-items-center" style="height: 120px; background-color: #fff;">
+            <img loading="lazy" src="{{ asset('storage/' . $store->logo) }}" 
+                 alt="{{ $store->name }}"
+                 style="max-height: 100%; max-width: 100%; object-fit: contain; padding: 10px;">
+        </div>
+        
+        <div class="bottom-area w-100 d-grid gap-2 gap-md-3">
+            <div class="rounded-1 n1-bg-color d-center gap-2 gap-md-3 justify-content-start cus-border border b-tenth p-1">
+                <div class="d-center fav-icon rounded-2 n1-bg-color box-shadow-p1">
+                    <img loading="lazy" class="max-un" src="{{ asset('assets/images/fav.png') }}" alt="Icon">
+                </div>
+                <span class="p1-color fs-eight fw-bold">{{ $store->coupons_count }} Coupons</span>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+                        <div class="col-12">
+                            <nav aria-label="Page navigation" class="d-flex justify-content-center mt-4 mt-md-8">
+                             {{ $stores->links('pagination.custom') }}
+
+                            </nav>
                         </div>
-                        @endforeach
                     </div>
                 </div>
             </div>

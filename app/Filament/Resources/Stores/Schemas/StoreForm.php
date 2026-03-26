@@ -21,9 +21,10 @@ class StoreForm
                     ->maxLength(255),
                 TextInput::make('country')
                     ->maxLength(255),
-               FileUpload::make('logo')
-                    ->image()
-                    ->directory('store-logos')
+              FileUpload::make('logo')
+    ->image()
+    ->disk('public')
+    ->directory('assets/images')   
             ]);
     }
 }

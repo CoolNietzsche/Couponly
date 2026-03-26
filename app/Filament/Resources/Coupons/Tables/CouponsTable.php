@@ -38,7 +38,10 @@ class CouponsTable
                 TextColumn::make('exclusive_amount')
                     ->numeric()
                     ->sortable(),
-                ImageColumn::make('image'),
+                ImageColumn::make('image')
+                    ->disk('public')
+                    ->visibility('public'),
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

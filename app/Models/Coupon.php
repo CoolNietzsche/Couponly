@@ -15,7 +15,7 @@ class Coupon extends Model
     protected $casts = [
         'expire_date' => 'datetime',
         'active' => 'boolean',
-        'amount_of_discount' => 'decimal',
+        'amount_of_discount' => 'decimal:2',
     ];
     public function store()
     {
